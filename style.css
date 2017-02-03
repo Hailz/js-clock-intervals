@@ -1,3 +1,6 @@
+body{
+  text-align: center;
+}
 #clock {
 }
 
@@ -5,10 +8,14 @@
 }
 
 #hour {
+  position: absolute;
 }
 
 #minute {
+  position: absolute;
 }
 
 #second {
+  position: absolute;
 }
+
