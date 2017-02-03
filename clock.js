@@ -1,43 +1,50 @@
 console.log("Running");
-document.addEventListener('DOMContentLoaded', function() {  
-  var degrees = 0;
-  
-  function secondRotation(){
-    for (var i = 0; i <= 60; i++) {
-      degrees= i;
-      ((degrees / 60) * 360);
-      return degrees;
-    };
-  };
 
-  function minRotation(){
-    for (var i = 0; i < 60; i++) {
-      degrees= i;
-      ((degrees / 60) * 360);
-      return degrees;
-    };
-  };
+var INTERVAL_DELAY = 1000;
+var SHOW_REAL_TIME = true;
 
-  function hourRotation(){
-    for (var i = 0; i < 12; i++) {
-      degrees= i;
-      ((degrees / 12) * 360);
-      return degrees;
-    };
-  };
+var SECONDS_IN_MINUTE = 60;
+var SECONDS_IN_HOUR = 60 * SECONDS_IN_MINUTE;
+var SECONDS_IN_12_HOURS = 12 * SECONDS_IN_HOUR;
 
-  var secondHand = document.getElementById("second");
-  var secondHandTick = secondHand.style.transform = "rotate(" + secondRotation() + "deg)";
+var TIME = 0;
 
-  var secondHandInterval = setInterval(secondHandTick, 1000);
-
-    var minHand = document.getElementById("minute");
-  var minHandTick = minHand.style.transform = "rotate(" + minRotation() + "deg)";
-
-  var minHandInterval = setInterval(minHandTick, 60000);
-
-    var hourHand = document.getElementById("hour");
-  var hourHandTick = hourHand.style.transform = "rotate(" + hourRotation() + "deg)";
-
-  var hourHandInterval = setInterval(hourHandTick, (3.6e+6));
+document.addEventListener("DOMContentLoaded", function() {
+  setInterval(tick, INTERVAL_DELAY);
 });
+
+function tick() {
+  if (SHOW_REAL_TIME) {
+    var now = new Date();
+    TIME = 0;
+    TIME += now.getMilliseconds() / 1000;
+    TIME += now.getSeconds();
+    TIME += 60 * now.getMinutes();
+    TIME +=  60 * 60 * now.getHours();
+  } else {
+    TIME++;
+    TIME = TIME % SECONDS_IN_12_HOURS;
+  }
+  rotateClock();
+};
+
+function rotateClock() {
+  second.style.transform = "rotate(" + degreesSeconds(TIME) + "deg)";
+  minute.style.transform = "rotate(" + degreesMinutes(TIME) + "deg)";
+  hour.style.transform = "rotate(" + degreesHours(TIME) + "deg)";
+};
+
+function degreesSeconds(seconds) {
+  var percent = seconds / SECONDS_IN_MINUTE * 360;
+  return Math.round(percent);
+};
+
+function degreesMinutes(seconds) {
+  var percent = seconds / SECONDS_IN_HOUR * 360;
+  return Math.round(percent);
+};
+
+function degreesHours(seconds) {
+  var percent = seconds / SECONDS_IN_12_HOURS * 360;
+  return Math.round(percent);
+};
